@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Task Scheduler</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete_all_tasks">Delete Tasks</string>
+    <string name="action_create_test_tasks">Create Task</string>
+    <string name="action_delete_task">Delete Task</string>
+    <string name="delete_task_dialog_title">Confirm</string>
+    <string name="message_delete_task">Delete Task?</string>
+    <string name="notification_tasks_id">Task_id</string>
+    <string name="notification_title">Task Reminder</string>
+    <string name="timer_message">You have a task to complete. Click here to continue</string>
+</resources>
