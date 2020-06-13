@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-//const val DATABASE_NAME = "Todosapp.db"
-const val DATABASE_NAME = "TasksApp.db"
+
+const val DATABASE_NAME = "TaskScheduler.db"
 const val DATABASE_VERSION = 1
 const val TABLE_TODOS_CREATE =
     "CREATE TABLE ${TodoEntry.TABLE_NAME}(" +
@@ -13,7 +13,8 @@ const val TABLE_TODOS_CREATE =
             "${TodoEntry.COLUMN_TEXT} TEXT," +
             "${TodoEntry.COLUMN_DESCRIPTION} TEXT, " +
             "${TodoEntry.COLUMN_DONE} INTEGER, " +
-            "${TodoEntry.DATE_CREATED} TEXT default CURRENT_TIMESTAMP )"
+            "${TodoEntry.HOUR_CREATED} INTEGER, " +
+            "${TodoEntry.MIN_CREATED} INTEGER )"
 
 
 class DatabaseHelper(context: Context?) :

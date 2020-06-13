@@ -33,7 +33,8 @@ class TaskListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
             TodoEntry.COLUMN_TEXT,
             TodoEntry.TABLE_NAME + "." + TodoEntry.ID,
             TodoEntry.COLUMN_DESCRIPTION,
-            TodoEntry.DATE_CREATED,
+            TodoEntry.HOUR_CREATED,
+            TodoEntry.MIN_CREATED,
             TodoEntry.COLUMN_DONE)
         cursor = contentResolver.query(TodoEntry.CONTENT_URI, projection, null, null, null)
         return cursor
@@ -55,12 +56,13 @@ class TaskListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
             val taskId = cursor!!.getInt(cursor!!.getColumnIndex(TodoEntry.ID))
             val taskText = cursor!!.getString(cursor!!.getColumnIndex(TodoEntry.COLUMN_TEXT))
             val taskDescription = cursor!!.getString(cursor!!.getColumnIndex(TodoEntry.COLUMN_DESCRIPTION))
-            val taskCreated = cursor!!.getString(cursor!!.getColumnIndex(TodoEntry.DATE_CREATED))
+            val taskHour = cursor!!.getInt(cursor!!.getColumnIndex(TodoEntry.HOUR_CREATED))
+            val taskMin = cursor!!.getInt(cursor!!.getColumnIndex(TodoEntry.MIN_CREATED))
             val taskDone = cursor!!.getInt(cursor!!.getColumnIndex(TodoEntry.COLUMN_DONE))
 
             val boolDone = (taskDone == 1)
 
-            val tasks = Tasks(taskId, taskText, taskDescription, taskCreated, boolDone)
+            val tasks = Tasks(taskId, taskText, taskDescription, taskHour, taskMin ,boolDone)
 
             val intent = Intent(this, TaskDetails::class.java)
             intent.putExtra("Tasks", tasks)
@@ -70,7 +72,7 @@ class TaskListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener {
-            val tasks = Tasks(0, "", "", "", false)
+            val tasks = Tasks(0, "", "", 0, 0 ,false)
             val intent = Intent(this, TaskDetails::class.java)
             intent.putExtra("Tasks", tasks)
             startActivity(intent)
@@ -97,7 +99,8 @@ class TaskListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
             TodoEntry.COLUMN_TEXT,
             TodoEntry.TABLE_NAME + "." + TodoEntry.ID,
             TodoEntry.COLUMN_DESCRIPTION,
-            TodoEntry.DATE_CREATED,
+            TodoEntry.HOUR_CREATED,
+            TodoEntry.MIN_CREATED,
             TodoEntry.COLUMN_DONE)
         return CursorLoader(this, TodoEntry.CONTENT_URI, projection, null, null, null)
     }

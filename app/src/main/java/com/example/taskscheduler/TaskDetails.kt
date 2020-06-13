@@ -1,7 +1,6 @@
 package com.example.taskscheduler
 
 import android.app.AlarmManager
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ContentValues
@@ -9,9 +8,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TimePicker
@@ -22,9 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.example.taskscheduler.Data.TodoEntry
 import com.example.taskscheduler.Util.AlarmReceiver
-import com.example.taskscheduler.Util.sendNotification
+import com.example.taskscheduler.Util.cancelAllNotifications
 import com.example.taskscheduler.databinding.ActivityTaskDetailsBinding
-import java.text.SimpleDateFormat
 import java.util.*
 
 class TaskDetails : AppCompatActivity() {
@@ -92,7 +88,8 @@ class TaskDetails : AppCompatActivity() {
         val values = ContentValues()
         values.put(TodoEntry.COLUMN_TEXT, tasks.text.get())
         values.put(TodoEntry.COLUMN_DESCRIPTION, tasks.description.get())
-        values.put(TodoEntry.DATE_CREATED, tasks.created.get())
+        values.put(TodoEntry.HOUR_CREATED, tasks.hour.get())
+        values.put(TodoEntry.MIN_CREATED, tasks.min.get())
         values.put(TodoEntry.COLUMN_DONE, tasks.done.get())
 
 
@@ -111,28 +108,45 @@ class TaskDetails : AppCompatActivity() {
 
     fun createNotification(){
 
-        Toast.makeText(this, "Sucessfully created notification", Toast.LENGTH_SHORT).show()
         //Create Alarm before creating notification
 
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        // TODO() Use the time from timePicker to set the notification
-        val time = System.currentTimeMillis()
-        val tenSeconds= 1000 * 10
+        val calendar = Calendar.getInstance()
+        val hour = timePicker.hour
+        val minute = timePicker.minute
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, time + tenSeconds, pendingIntent)
+        if (calendar.before(Calendar.getInstance())){
+            calendar.add(Calendar.DATE, 1)
+        }
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        Toast.makeText(this, "Sucessfully created notification", Toast.LENGTH_SHORT).show()
     }
 
     fun notificationChecked(){
         if (tasks.done.get()){
+            val notificationManager = ContextCompat.getSystemService(this,
+                NotificationManager::class.java)
+
+            notificationManager!!.cancelAllNotifications()
             createNotification()
-            checkTime()
+        }
+        else{
+            cancelNotifications()
         }
     }
 
-    fun checkTime(){
-        Log.d(TAG, "Hour is ${timePicker.hour} and minute is ${timePicker.minute}")
+    fun cancelNotifications(){
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+
+        alarmManager.cancel(pendingIntent)
     }
 }

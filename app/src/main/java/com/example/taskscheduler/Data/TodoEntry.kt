@@ -14,13 +14,13 @@ object TodoEntry : BaseColumns{
     val CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_TASKS)
 
     // Table Name
-    //const val TABLE_NAME = "Todos"
-    const val TABLE_NAME = "Tasks"
+    const val TABLE_NAME = "TaskApp"
 
     // Fields
     const val ID = BaseColumns._ID
     const val COLUMN_TEXT = "Text"
     const val COLUMN_DESCRIPTION = "Description"
-    const val DATE_CREATED = "Created"
+    const val HOUR_CREATED  = "hour"
+    const val MIN_CREATED = "min"
     const val COLUMN_DONE = "Done"
 }

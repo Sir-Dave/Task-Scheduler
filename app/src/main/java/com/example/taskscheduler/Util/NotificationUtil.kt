@@ -12,14 +12,14 @@ import com.example.taskscheduler.TaskDetails
 import com.example.taskscheduler.TaskListActivity
 
 private val NOTIFICATION_ID = 0
-private val REQUEST_CODE = 0
-private val FLAG = 0
 
-fun NotificationManager.sendNotification(messageBody: String, context: Context){
+fun NotificationManager.sendNotification(messageBody: String, context: Context) {
 
     val contentIntent = Intent(context, TaskListActivity::class.java)
-    val pendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID,
-        contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent = PendingIntent.getActivity(
+        context, NOTIFICATION_ID,
+        contentIntent, PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
 
     val builder = NotificationCompat.Builder(context, context.getString(R.string.notification_tasks_id))
@@ -33,6 +33,6 @@ fun NotificationManager.sendNotification(messageBody: String, context: Context){
     notify(NOTIFICATION_ID, builder.build())
 }
 
-fun NotificationManager.cancelNotifications(){
+fun NotificationManager.cancelAllNotifications(){
     cancelAll()
 }
