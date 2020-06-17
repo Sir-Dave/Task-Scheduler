@@ -1,5 +1,6 @@
 package com.example.taskscheduler
 
+import android.annotation.TargetApi
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -158,23 +159,24 @@ class TaskDetails : AppCompatActivity() {
         alarmManager.cancel(pendingIntent)
     }
 
+    @TargetApi(26)
     private fun createChannel(channelId: String, channelName: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel =
-                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-
-            notificationChannel.apply {
-                enableLights(true)
-                lightColor = Color.RED
-                enableVibration(true)
-                description = "You have a task"
-                setShowBadge(false)
-            }
-
-            val notificationManager =
-                getSystemService(NotificationManager::class.java) as NotificationManager
-            notificationManager.createNotificationChannel(notificationChannel)
         }
+        val notificationChannel =
+            NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+
+        notificationChannel.apply {
+            enableLights(true)
+            lightColor = Color.RED
+            enableVibration(true)
+            description = "You have a task"
+            setShowBadge(false)
+        }
+
+        val notificationManager =
+            getSystemService(NotificationManager::class.java) as NotificationManager
+        notificationManager.createNotificationChannel(notificationChannel)
 
     }
 }
