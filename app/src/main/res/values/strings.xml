@@ -7,6 +7,7 @@
     <string name="delete_task_dialog_title">Confirm</string>
     <string name="message_delete_task">Delete Task?</string>
     <string name="notification_tasks_id">Task_id</string>
+    <string name="notification_tasks_name">Tasks</string>
     <string name="notification_title">Task Reminder</string>
     <string name="timer_message">You have a task to complete. Click here to continue</string>
 </resources>

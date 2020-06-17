@@ -1,13 +1,18 @@
 package com.example.taskscheduler
 
 import android.app.AlarmManager
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -40,6 +45,8 @@ class TaskDetails : AppCompatActivity() {
 
         binding.tasks = tasks
         timePicker = findViewById(R.id.time_picker)
+
+        createChannel(getString(R.string.notification_tasks_id), getString(R.string.notification_tasks_name))
 
     }
 
@@ -134,7 +141,8 @@ class TaskDetails : AppCompatActivity() {
             val notificationManager = ContextCompat.getSystemService(this,
                 NotificationManager::class.java)
 
-            notificationManager!!.cancelAllNotifications()
+            cancelNotifications()
+            //notificationManager!!.cancelAllNotifications()
             createNotification()
         }
         else{
@@ -148,5 +156,25 @@ class TaskDetails : AppCompatActivity() {
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
 
         alarmManager.cancel(pendingIntent)
+    }
+
+    private fun createChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel =
+                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+
+            notificationChannel.apply {
+                enableLights(true)
+                lightColor = Color.RED
+                enableVibration(true)
+                description = "You have a task"
+                setShowBadge(false)
+            }
+
+            val notificationManager =
+                getSystemService(NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
     }
 }
