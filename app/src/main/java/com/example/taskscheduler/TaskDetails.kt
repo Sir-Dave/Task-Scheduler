@@ -139,11 +139,7 @@ class TaskDetails : AppCompatActivity() {
 
     fun notificationChecked(){
         if (tasks.done.get()){
-            val notificationManager = ContextCompat.getSystemService(this,
-                NotificationManager::class.java)
-
             cancelNotifications()
-            //notificationManager!!.cancelAllNotifications()
             createNotification()
         }
         else{
@@ -162,21 +158,20 @@ class TaskDetails : AppCompatActivity() {
     @TargetApi(26)
     private fun createChannel(channelId: String, channelName: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel =
+                NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+
+            notificationChannel.apply {
+                enableLights(true)
+                lightColor = Color.RED
+                enableVibration(true)
+                description = "You have a task"
+                setShowBadge(false)
+            }
+
+            val notificationManager =
+                getSystemService(NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
         }
-        val notificationChannel =
-            NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-
-        notificationChannel.apply {
-            enableLights(true)
-            lightColor = Color.RED
-            enableVibration(true)
-            description = "You have a task"
-            setShowBadge(false)
-        }
-
-        val notificationManager =
-            getSystemService(NotificationManager::class.java) as NotificationManager
-        notificationManager.createNotificationChannel(notificationChannel)
-
     }
 }
